@@ -155,6 +155,8 @@ filesets:
 
   tb-verilator:
     files:
+    - tb/Bridge2Xheep.h: { is_include_file: true }
+    - tb/Bridge2Xheep.cpp
     - tb/XHEEP_CmdLineOptions.hh: { is_include_file: true }
     - tb/XHEEP_CmdLineOptions.cpp
     - tb/tb_top.cpp

@@ -7,7 +7,9 @@ package testharness_pkg;
   import addr_map_rule_pkg::*;
   import core_v_mini_mcu_pkg::*;
 
-  localparam EXT_XBAR_NMASTER = 4;
+  //localparam EXT_XBAR_NMASTER = 4;
+  // Modified to 5 to add another port for the USBtoHEEP bridge
+  localparam EXT_XBAR_NMASTER = 5;
   localparam EXT_XBAR_NSLAVE = 1;
 
   //master idx
@@ -15,6 +17,8 @@ package testharness_pkg;
   localparam logic [31:0] EXT_MASTER1_IDX = 1;
   localparam logic [31:0] EXT_MASTER2_IDX = 2;
   localparam logic [31:0] EXT_MASTER3_IDX = 3;
+  // Added for the bridge
+  localparam logic [31:0] EXT_MASTER4_IDX = 4;
 
   //slave mmap and idx
   localparam logic [31:0] SLOW_MEMORY_START_ADDRESS = core_v_mini_mcu_pkg::EXT_SLAVE_START_ADDRESS;

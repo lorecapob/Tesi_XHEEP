@@ -38,7 +38,21 @@ module testharness #(
     input  wire         jtag_tdi_i,
     output wire         jtag_tdo_o,
     output logic [31:0] exit_value_o,
-    inout  wire         exit_valid_o
+    inout  wire         exit_valid_o,
+
+    // Added to connect the bridge
+    // Request section for the OBI interface
+    input logic        req_i,
+    input logic        we_i,
+    input logic [ 3:0] be_i,
+    input logic [31:0] addr_i,
+    input logic [31:0] wdata_i,
+
+    // Response section for the OBI interface
+    output logic        gnt_o,
+    output logic        rvalid_o,
+    output logic [31:0] rdata_o
+
 );
 
 
@@ -105,9 +119,9 @@ module testharness #(
   end
 
   // External xbar master/slave and peripheral ports
-  obi_req_t [EXT_XBAR_NMASTER_RND-1:0] ext_master_req;
+  obi_req_t [EXT_XBAR_NMASTER_RND-1:0] ext_master_req;   // this structure contains 5 obi ports. 1 was added for the bridge modifying testharness_pkg.sv
   obi_req_t [EXT_XBAR_NMASTER_RND-1:0] heep_slave_req;
-  obi_resp_t [EXT_XBAR_NMASTER_RND-1:0] ext_master_resp;
+  obi_resp_t [EXT_XBAR_NMASTER_RND-1:0] ext_master_resp; // this structure contains 5 obi ports. 1 was added for the bridge modifying testharness_pkg.sv
   obi_resp_t [EXT_XBAR_NMASTER_RND-1:0] heep_slave_resp;
   obi_req_t heep_core_instr_req;
   obi_resp_t heep_core_instr_resp;
@@ -318,13 +332,26 @@ module testharness #(
       .heep_dma_write_resp_o   (heep_dma_write_resp),
       .heep_dma_addr_req_i     (heep_dma_addr_req),
       .heep_dma_addr_resp_o    (heep_dma_addr_resp),
-      .ext_master_req_i        (ext_master_req),
-      .ext_master_resp_o       (ext_master_resp),
+      .ext_master_req_i        (ext_master_req),                            // Port of interest
+      .ext_master_resp_o       (ext_master_resp),                           // Port of interest
       .heep_slave_req_o        (heep_slave_req),
       .heep_slave_resp_i       (heep_slave_resp),
       .ext_slave_req_o         (ext_slave_req),
       .ext_slave_resp_i        (ext_slave_resp)
   );
+
+  // Connection of ext_bus bridge port with module interface signals
+  // Inputs
+  assign ext_master_req[4].req   = req_i;
+  assign ext_master_req[4].we    = we_i;
+  assign ext_master_req[4].be    = be_i;
+  assign ext_master_req[4].addr  = addr_i;
+  assign ext_master_req[4].wdata = wdata_i;
+
+  // Outputs
+  assign gnt_o    = ext_master_resp[4].gnt;
+  assign rvalid_o = ext_master_resp[4].rvalid;
+  assign rdata_o  = ext_master_resp[4].rdata;
 
   logic pdm;
 

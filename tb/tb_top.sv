@@ -51,6 +51,18 @@ module tb_top #(
   wire                jtag_tdi;
   wire                jtag_tdo;
 
+  // Bridge signals
+  logic               req;
+  logic               we;
+  logic        [ 3:0] be;
+  logic        [31:0] addr;
+  logic        [31:0] wdata;
+
+  logic               gnt;
+  logic               rvalid;
+  logic        [31:0] rdata;
+
+
   // allow vcd dump
   initial begin
     if ($test$plusargs("vcd")) begin
@@ -209,7 +221,19 @@ module tb_top #(
       .jtag_trst_ni        (jtag_trst_n),
       .jtag_tms_i          (jtag_tms),
       .jtag_tdi_i          (jtag_tdi),
-      .jtag_tdo_o          (jtag_tdo)
+      .jtag_tdo_o          (jtag_tdo),
+
+      // Added for the bridge
+      .req_i  (req),
+      .we_i   (we),
+      .be_i   (be),
+      .addr_i (addr),
+      .wdata_i(wdata),
+
+      .gnt_o   (gnt),
+      .rvalid_o(rvalid),
+      .rdata_o (rdata),
+
   );
 
 
