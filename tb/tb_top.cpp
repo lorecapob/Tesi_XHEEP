@@ -37,8 +37,8 @@ void runCycles(unsigned int ncycles, Vtestharness *dut, VerilatedFstC *m_trace){
 
 	std::string instr = "";
 	std::string address = "";
-	int address_int = 0;
-	long long int instr_int = 0x0;
+	vluint32_t address_int = 0;
+	vluint32_t instr_int = 0x0;
 	char tmp_hex;
   // int SOC_CTRL_BOOT_LOOP_REG_OFFSET = 0; -------> use the method dut->tb_set_exit_loop()
 
@@ -70,7 +70,8 @@ void initRAM(Vtestharness *dut, Bridge2Xheep bridge, VerilatedFstC *m_trace, std
             instr += '0';
           }
 
-          instr_int = stoll(instr, nullptr, 16);
+          instr = instr.substr(6,2) + instr.substr(4,2) + instr.substr(2,2) + instr.substr(0,2);
+          instr_int = stoul(instr, nullptr, 16);
           
           bridge.setInstr(instr_int);
           bridge.setInstrValid();
@@ -107,7 +108,8 @@ void initRAM(Vtestharness *dut, Bridge2Xheep bridge, VerilatedFstC *m_trace, std
 
             if ((instr.length() == 8))
             {
-              instr_int = stoll(instr, nullptr, 16);
+              instr = instr.substr(6,2) + instr.substr(4,2) + instr.substr(2,2) + instr.substr(0,2);
+              instr_int = stoul(instr, nullptr, 16);
 
               // At this point send address and instruction to the bridge
               bridge.setAddress(address_int);
@@ -133,9 +135,10 @@ void initRAM(Vtestharness *dut, Bridge2Xheep bridge, VerilatedFstC *m_trace, std
   }
 
   // End of initialization. Set exit_loop to 1
+  //runCycles(1, dut, m_trace);
   dut->tb_set_exit_loop();
   std::cout<<"Set Exit Loop"<< std::endl;
-  runCycles(1, dut, m_trace);
+  //runCycles(1, dut, m_trace);
   std::cout<<"Memory Loaded"<< std::endl;
 }
 
@@ -148,7 +151,7 @@ int main (int argc, char * argv[])
   std::string firmware;
   unsigned int max_sim_time, boot_sel, exit_val;
   bool use_openocd;
-  bool run_all = false;
+  bool run_all = true; // changed to true to extend simulation time
 
   Verilated::commandArgs(argc, argv);
 

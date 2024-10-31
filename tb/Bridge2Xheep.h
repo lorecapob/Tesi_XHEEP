@@ -10,8 +10,8 @@ private:
     
     int busy = 0;
     int state = 0;
-    int address = 0;
-    long long int instruction = 0;
+    vluint32_t address = 0;
+    vluint32_t instruction = 0;
     int instruction_valid = 0;
 public:
     Bridge2Xheep(Vtestharness *dut);
@@ -20,8 +20,8 @@ public:
     //int endInit();
     int isBridgeBusy();
     
-    void setAddress(int address);
-    void setInstr(long long int instruction);
+    void setAddress(vluint32_t address);
+    void setInstr(vluint32_t instruction);
     void setInstrValid();
     void writeToRAM();
 };

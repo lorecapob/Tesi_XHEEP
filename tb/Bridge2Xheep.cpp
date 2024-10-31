@@ -13,8 +13,8 @@ Bridge2Xheep::~Bridge2Xheep()
 
 void Bridge2Xheep::writeToRAM(){
 
-    int instrToXheep = 0;
-    long long int addrToXheep = 0; 
+    vluint32_t instrToXheep = 0;
+    vluint32_t addrToXheep = 0; 
 
     switch (this->state)
     {
@@ -82,11 +82,11 @@ int Bridge2Xheep::isBridgeBusy()
     return this->busy;
 }
 
-void Bridge2Xheep::setAddress(int address) {
+void Bridge2Xheep::setAddress(vluint32_t address) {
     this->address = address;
 }
 
-void Bridge2Xheep::setInstr(long long int instruction) {
+void Bridge2Xheep::setInstr(vluint32_t instruction) {
     this->instruction = instruction;
 }
 
